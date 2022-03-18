@@ -1,0 +1,101 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "payable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "enum RPS.Hand",
+						"name": "_hand",
+						"type": "uint8"
+					}
+				],
+				"name": "createRoom",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "roomNum",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "roomNum",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum RPS.Hand",
+						"name": "_hand",
+						"type": "uint8"
+					}
+				],
+				"name": "joinRoom",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "roomNum",
+						"type": "uint256"
+					}
+				],
+				"name": "payout",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"RPS.sol": "RPS"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"RPS.sol": {
+			"keccak256": "0xb28ecf71a537081922ce29d6205d38783ef2a422acdf96a0127d66d0919a7944",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://09d9063e57ae33e89f2df192e2de5a90be7aafdeda53372b563704c206c8ca9e",
+				"dweb:/ipfs/QmULEomZsvon752zaTkYYc97hhG2SDLu4MQzyFSpDRShnA"
+			]
+		}
+	},
+	"version": 1
+}
