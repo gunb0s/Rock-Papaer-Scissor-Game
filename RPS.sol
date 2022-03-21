@@ -98,8 +98,9 @@ contract RPS {
 
     /**
      * payout함수를 실행하는 주체는 방장또는 참가자여야 한다 참가자는 중간에 자신이 낸 값을 변경할 수도 있기 때문이다????
+     * payout은 방에 참가자가 참가해서 가위바위보가 실행되면 자동으로 실행되며 외부에서 따로 실행할 필요는 없을 거 같다
      */
-    function payout(uint roomNum) public payable isPlayer(roomNum, msg.sender) {
+    function payout(uint roomNum) private {
         if (rooms[roomNum].originator.playerStatus == PlayerStatus.STATUS_TIE && rooms[roomNum].taker.playerStatus == PlayerStatus.STATUS_TIE) {
             rooms[roomNum].originator.addr.transfer(rooms[roomNum].originator.playerBetAmount);
             rooms[roomNum].taker.addr.transfer(rooms[roomNum].taker.playerBetAmount);

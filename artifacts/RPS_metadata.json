@@ -68,7 +68,11 @@
 		},
 		"userdoc": {
 			"kind": "user",
-			"methods": {},
+			"methods": {
+				"payout(uint256)": {
+					"notice": "payout함수를 실행하는 주체는 방장또는 참가자여야 한다 참가자는 중간에 자신이 낸 값을 변경할 수도 있기 때문이다????"
+				}
+			},
 			"version": 1
 		}
 	},
@@ -89,11 +93,11 @@
 	},
 	"sources": {
 		"RPS.sol": {
-			"keccak256": "0xb28ecf71a537081922ce29d6205d38783ef2a422acdf96a0127d66d0919a7944",
+			"keccak256": "0xe445d98577c3a06142695f7e0df06233ba4d9b3d99a240ead100ff5d65eecda7",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://09d9063e57ae33e89f2df192e2de5a90be7aafdeda53372b563704c206c8ca9e",
-				"dweb:/ipfs/QmULEomZsvon752zaTkYYc97hhG2SDLu4MQzyFSpDRShnA"
+				"bzz-raw://7b427da20d547e248e305d2e9f499a8aa53968aadd36954ce9fab59f865be2d3",
+				"dweb:/ipfs/QmZQErJmmvfz4iuhPxQakQGXmZCFe1Y6RnQcSpWMmXfRdN"
 			]
 		}
 	},
