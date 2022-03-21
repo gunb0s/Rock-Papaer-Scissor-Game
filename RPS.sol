@@ -36,7 +36,7 @@ contract RPS {
 
     // sender의 타입은 address, originator와 taker의 type은 address payable이다
     modifier isPlayer(uint roomNum, address sender) {
-        require(sender == rooms[roomNum].originator.addr || sender == rooms[roomNum].taker.addr);
+        require(payable(sender) == rooms[roomNum].originator.addr || payable(sender) == rooms[roomNum].taker.addr);
         _;
     }
 
@@ -62,6 +62,8 @@ contract RPS {
     }
 
     function joinRoom(uint roomNum, Hand _hand) public payable isValidHand(_hand) {
+        require(rooms[roomNum].gameStatus != GameStatus.STATUS_COMPLETE || rooms[roomNum].gameStatus != GameStatus.STATUS_ERROR);
+
         rooms[roomNum].taker = Player({
             hand: _hand,
             addr: payable(msg.sender),
@@ -69,7 +71,9 @@ contract RPS {
             playerBetAmount: msg.value
         });
         rooms[roomNum].betAmount = rooms[roomNum].betAmount + msg.value;
+        
         compareHands(roomNum);
+        payout(roomNum);
     }
 
     function compareHands(uint roomNum) private {
@@ -93,7 +97,7 @@ contract RPS {
     }
 
     /**
-     * payout함수를 실행하는 주체는 방장또는 참가자여야 한다 참가자는 중가에 자신이 낸 값을 변경할 수도 있기 때문이다????
+     * payout함수를 실행하는 주체는 방장또는 참가자여야 한다 참가자는 중간에 자신이 낸 값을 변경할 수도 있기 때문이다????
      */
     function payout(uint roomNum) public payable isPlayer(roomNum, msg.sender) {
         if (rooms[roomNum].originator.playerStatus == PlayerStatus.STATUS_TIE && rooms[roomNum].taker.playerStatus == PlayerStatus.STATUS_TIE) {
