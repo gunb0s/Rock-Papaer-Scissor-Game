@@ -10,13 +10,14 @@ import (
 	"github.com/ethereum/go-ethereum/common/math"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/crypto/secp256k1"
+	solsha3 "github.com/miguelmota/go-solidity-sha3"
 )
 
 func main() {
 	key := KeyGen()
 	message := "TEST"
 
-	sig, prefixedmsg := Sign(message, key)
+	sig, _ := Sign(message, key)
 
 	fmt.Println("address:", hex.EncodeToString(crypto.PubkeyToAddress(key.PublicKey).Bytes()))
 	fmt.Println("signature:", hex.EncodeToString(sig))

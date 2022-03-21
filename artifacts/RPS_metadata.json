@@ -13,9 +13,9 @@
 			{
 				"inputs": [
 					{
-						"internalType": "enum RPS.Hand",
+						"internalType": "bytes",
 						"name": "_hand",
-						"type": "uint8"
+						"type": "bytes"
 					}
 				],
 				"name": "createRoom",
@@ -37,9 +37,9 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "enum RPS.Hand",
+						"internalType": "bytes",
 						"name": "_hand",
-						"type": "uint8"
+						"type": "bytes"
 					}
 				],
 				"name": "joinRoom",
@@ -50,14 +50,25 @@
 			{
 				"inputs": [
 					{
-						"internalType": "uint256",
-						"name": "roomNum",
-						"type": "uint256"
+						"internalType": "address",
+						"name": "_sender",
+						"type": "address"
+					},
+					{
+						"internalType": "bytes",
+						"name": "_sig",
+						"type": "bytes"
 					}
 				],
-				"name": "payout",
-				"outputs": [],
-				"stateMutability": "payable",
+				"name": "verify",
+				"outputs": [
+					{
+						"internalType": "uint8",
+						"name": "",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "pure",
 				"type": "function"
 			}
 		],
@@ -68,11 +79,7 @@
 		},
 		"userdoc": {
 			"kind": "user",
-			"methods": {
-				"payout(uint256)": {
-					"notice": "payout함수를 실행하는 주체는 방장또는 참가자여야 한다 참가자는 중간에 자신이 낸 값을 변경할 수도 있기 때문이다????"
-				}
-			},
+			"methods": {},
 			"version": 1
 		}
 	},
@@ -93,11 +100,11 @@
 	},
 	"sources": {
 		"RPS.sol": {
-			"keccak256": "0xe445d98577c3a06142695f7e0df06233ba4d9b3d99a240ead100ff5d65eecda7",
+			"keccak256": "0x1126519e0828b5942497fb7f1c4baec58a441633fbf460590792c9a5b4731bd5",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://7b427da20d547e248e305d2e9f499a8aa53968aadd36954ce9fab59f865be2d3",
-				"dweb:/ipfs/QmZQErJmmvfz4iuhPxQakQGXmZCFe1Y6RnQcSpWMmXfRdN"
+				"bzz-raw://1f6461052fb5a31363a24922f9796b8bbd6f4df452d96c76b8b0ffb36630526e",
+				"dweb:/ipfs/QmXU3SX7vzj8ZoEHtpw8cHXpvPnLpfxZ3gTMQoQPT86toj"
 			]
 		}
 	},
