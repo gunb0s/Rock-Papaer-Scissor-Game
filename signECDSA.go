@@ -17,6 +17,8 @@ func main() {
 	key := KeyGen()
 	message := "TEST"
 
+	fmt.Println(key)
+
 	sig, _ := Sign(message, key)
 
 	fmt.Println("address:", hex.EncodeToString(crypto.PubkeyToAddress(key.PublicKey).Bytes()))
