@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navigation from "./components/Navigation";
 import GameRooms from "./components/GameRooms";
@@ -17,7 +17,13 @@ const Main = styled.main`
   padding-bottom: 2rem;
 `;
 
-function App() {
+const App = () => {
+  useEffect(() => {
+    if (typeof window.ethereum !== "undefined") {
+      console.log("MetaMask is installed!");
+    }
+  });
+
   return (
     <Container>
       <Navigation />
@@ -26,6 +32,6 @@ function App() {
       </Main>
     </Container>
   );
-}
+};
 
 export default App;
