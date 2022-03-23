@@ -2,16 +2,16 @@
 pragma solidity ^0.8.7;
 
 contract RPS {
-    enum Hand {
-        rock, paper, scissors
-    }
+    // enum Hand {
+    //     rock, paper, scissors
+    // }
     enum PlayerStatus {
         STATUS_WIN, STATUS_LOSE, STATUS_TIE, STATUS_PENDING
     }
     struct Player {
         address payable addr;
         uint256 playerBetAmount;
-        Hand hand;
+        uint8 hand;
         PlayerStatus playerStatus;
     }
     enum GameStatus {
@@ -29,29 +29,31 @@ contract RPS {
 
     constructor() payable {}
 
-    modifier isValidHand(Hand _hand) {
-        require((_hand == Hand.rock) || (_hand == Hand.paper) || (_hand == Hand.scissors));
-        _;
-    }
+    // modifier isValidHand(Hand _hand) {
+    //     require((_hand == Hand.rock) || (_hand == Hand.paper) || (_hand == Hand.scissors));
+    //     _;
+    // }
 
-    // sender의 타입은 address, originator와 taker의 type은 address payable이다
-    modifier isPlayer(uint roomNum, address sender) {
-        require(payable(sender) == rooms[roomNum].originator.addr || payable(sender) == rooms[roomNum].taker.addr);
-        _;
-    }
+    // // sender의 타입은 address, originator와 taker의 type은 address payable이다
+    // modifier isPlayer(uint roomNum, address sender) {
+    //     require(payable(sender) == rooms[roomNum].originator.addr || payable(sender) == rooms[roomNum].taker.addr);
+    //     _;
+    // }
+    function createRoom(bytes memory _hand) public payable returns (uint roomNum) {
+        uint8 result = verify(msg.sender, _hand);
+        require(result != 3);
 
-    function createRoom(Hand _hand) public payable isValidHand(_hand) returns (uint roomNum) {
         rooms[roomLen] = Game({
             betAmount: msg.value,
             gameStatus: GameStatus.STATUS_NOT_STARTED,
             originator: Player({
-                hand: _hand,
+                hand: result,
                 addr: payable(msg.sender),
                 playerStatus: PlayerStatus.STATUS_PENDING,
                 playerBetAmount: msg.value
             }),
             taker: Player({
-                hand: Hand.rock,
+                hand: 0,
                 addr: payable(msg.sender),
                 playerStatus: PlayerStatus.STATUS_PENDING,
                 playerBetAmount: 0
@@ -61,11 +63,13 @@ contract RPS {
         roomLen = roomLen + 1;
     }
 
-    function joinRoom(uint roomNum, Hand _hand) public payable isValidHand(_hand) {
+    function joinRoom(uint roomNum, bytes memory _hand) public payable {
         require(rooms[roomNum].gameStatus != GameStatus.STATUS_COMPLETE || rooms[roomNum].gameStatus != GameStatus.STATUS_ERROR);
+        uint8 result = verify(msg.sender, _hand);
+        require(result != 3);
 
         rooms[roomNum].taker = Player({
-            hand: _hand,
+            hand: result,
             addr: payable(msg.sender),
             playerStatus: PlayerStatus.STATUS_PENDING,
             playerBetAmount: msg.value
@@ -116,5 +120,53 @@ contract RPS {
         }
 
         rooms[roomNum].gameStatus = GameStatus.STATUS_COMPLETE;
+    }
+
+    function verify(address _sender, bytes memory _sig) public pure returns (uint8) {
+        bytes32 message_rock = ethMessageHash("rock");
+        bytes32 message_paper = ethMessageHash("paper");
+        bytes32 message_scissor = ethMessageHash("scissor");
+        
+        if (recover(message_rock, _sig) == _sender) {
+            return 0;
+        } else if (recover(message_paper, _sig) == _sender) {
+            return 1;
+        } else if (recover(message_scissor, _sig) == _sender) {
+            return 2;
+        } else {
+            return 3;
+        }
+    }
+
+    function recover(bytes32 _hash, bytes memory _sig) internal pure returns (address) {
+        bytes32 r;
+        bytes32 s;
+        uint8 v;
+
+        if (_sig.length != 65) {
+            return address(0);
+        }
+
+        assembly {
+            r := mload(add(_sig, 32))
+            s := mload(add(_sig, 64))
+            v := byte(0, mload(add(_sig, 96)))
+        }
+        if (v < 27) {
+            v += 27;
+        }
+
+        if (v != 27 && v != 28) {
+            return address(0);
+        } else {
+            return ecrecover(_hash, v, r, s);
+        }
+    }
+
+    function ethMessageHash(string memory _message) internal pure returns (bytes32) {
+         return
+            keccak256(
+                abi.encodePacked("\x19Ethereum Signed Message:\n32", _message)
+            );
     }
 }
