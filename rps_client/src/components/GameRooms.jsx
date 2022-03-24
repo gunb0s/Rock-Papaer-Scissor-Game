@@ -1,5 +1,6 @@
 import React from "react";
 import { ListGroup } from "react-bootstrap";
+import Web3 from "web3";
 
 const GameRooms = () => {
   return (
