@@ -2,8 +2,9 @@
 pragma solidity ^0.8.0;
 
 import "./RPSToken.sol";
+import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
 
-contract RPS {
+contract RPS is Ownable {
     RPSToken rps_token;
     // address RPSTokenContract;
 
@@ -47,6 +48,10 @@ contract RPS {
     //     require(payable(sender) == rooms[roomNum].originator.addr || payable(sender) == rooms[roomNum].taker.addr);
     //     _;
     // }
+
+    function withdraw_ether_to_owner() public onlyOwner {
+        payable(owner()).transfer(address(this).balance);
+    }
 
     function createRoom(Hand _hand) public payable isValidHand(_hand) returns (uint roomNum) {
         rooms[roomLen] = Game({
@@ -110,18 +115,18 @@ contract RPS {
      */
     function payout(uint roomNum) private {
         if (rooms[roomNum].originator.playerStatus == PlayerStatus.STATUS_TIE && rooms[roomNum].taker.playerStatus == PlayerStatus.STATUS_TIE) {
-            rooms[roomNum].originator.addr.transfer(rooms[roomNum].originator.playerBetAmount);
-            rooms[roomNum].taker.addr.transfer(rooms[roomNum].taker.playerBetAmount);
+            rooms[roomNum].originator.addr.transfer(rooms[roomNum].originator.playerBetAmount * 90 / 100) ;
+            rooms[roomNum].taker.addr.transfer(rooms[roomNum].taker.playerBetAmount * 90 / 100);
         } else {
             if (rooms[roomNum].originator.playerStatus == PlayerStatus.STATUS_WIN) {
-                rooms[roomNum].originator.addr.transfer(rooms[roomNum].betAmount);
-                rps_token.transfer(address(rooms[roomNum].originator.addr), 10 * (10** rps_token.decimals()));
+                rooms[roomNum].originator.addr.transfer(rooms[roomNum].betAmount  * 90 / 100);
+                rps_token.transfer(address(rooms[roomNum].originator.addr), 10 * (10 ** rps_token.decimals()));
             } else if (rooms[roomNum].taker.playerStatus == PlayerStatus.STATUS_WIN) {
-                rooms[roomNum].taker.addr.transfer(rooms[roomNum].betAmount);
-                rps_token.transfer(address(rooms[roomNum].taker.addr), 10 * (10** rps_token.decimals()));
+                rooms[roomNum].taker.addr.transfer(rooms[roomNum].betAmount  * 90 / 100);
+                rps_token.transfer(address(rooms[roomNum].taker.addr), 10 * (10 ** rps_token.decimals()));
             } else {
-                rooms[roomNum].originator.addr.transfer(rooms[roomNum].originator.playerBetAmount);
-                rooms[roomNum].taker.addr.transfer(rooms[roomNum].taker.playerBetAmount);
+                rooms[roomNum].originator.addr.transfer(rooms[roomNum].originator.playerBetAmount * 90 / 100);
+                rooms[roomNum].taker.addr.transfer(rooms[roomNum].taker.playerBetAmount * 90 / 100);
             }
         }
 
