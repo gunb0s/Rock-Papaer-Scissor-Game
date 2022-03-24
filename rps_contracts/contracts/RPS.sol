@@ -1,7 +1,12 @@
 //SPDX-License-Identifier: MIT
-pragma solidity ^0.8.7;
+pragma solidity ^0.8.0;
+
+import "./RPSToken.sol";
 
 contract RPS {
+    RPSToken rps_token;
+    // address RPSTokenContract;
+
     enum Hand {
         rock, paper, scissors
     }
@@ -27,7 +32,10 @@ contract RPS {
     mapping(uint => Game) rooms;
     uint roomLen = 0;
 
-    constructor() payable {}
+    constructor() payable {
+        rps_token = new RPSToken("RPSToken", "RT");
+        rps_token.mint(address(this), 1000 * (10** rps_token.decimals()));
+    }
 
     modifier isValidHand(Hand _hand) {
         require((_hand == Hand.rock) || (_hand == Hand.paper) || (_hand == Hand.scissors));
@@ -35,10 +43,10 @@ contract RPS {
     }
 
     // sender의 타입은 address, originator와 taker의 type은 address payable이다
-    modifier isPlayer(uint roomNum, address sender) {
-        require(payable(sender) == rooms[roomNum].originator.addr || payable(sender) == rooms[roomNum].taker.addr);
-        _;
-    }
+    // modifier isPlayer(uint roomNum, address sender) {
+    //     require(payable(sender) == rooms[roomNum].originator.addr || payable(sender) == rooms[roomNum].taker.addr);
+    //     _;
+    // }
 
     function createRoom(Hand _hand) public payable isValidHand(_hand) returns (uint roomNum) {
         rooms[roomLen] = Game({
@@ -107,8 +115,10 @@ contract RPS {
         } else {
             if (rooms[roomNum].originator.playerStatus == PlayerStatus.STATUS_WIN) {
                 rooms[roomNum].originator.addr.transfer(rooms[roomNum].betAmount);
+                rps_token.transfer(address(rooms[roomNum].originator.addr), 10 * (10** rps_token.decimals()));
             } else if (rooms[roomNum].taker.playerStatus == PlayerStatus.STATUS_WIN) {
                 rooms[roomNum].taker.addr.transfer(rooms[roomNum].betAmount);
+                rps_token.transfer(address(rooms[roomNum].taker.addr), 10 * (10** rps_token.decimals()));
             } else {
                 rooms[roomNum].originator.addr.transfer(rooms[roomNum].originator.playerBetAmount);
                 rooms[roomNum].taker.addr.transfer(rooms[roomNum].taker.playerBetAmount);

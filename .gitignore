@@ -2,6 +2,7 @@
 
 # dependencies
 rps_client/node_modules
+rps_contracts/node_modules
 rps_client/.pnp
 .pnp.js
 
