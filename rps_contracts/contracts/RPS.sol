@@ -30,7 +30,7 @@ contract RPS is Ownable {
         GameStatus gameStatus;
     }
 
-    mapping(uint => Game) rooms;
+    mapping(uint => Game) public rooms;
     uint roomLen = 0;
 
     constructor() payable {
