@@ -1,0 +1,166 @@
+{
+  "name": "rinkeby",
+  "chainId": "4",
+  "contracts": {
+    "RPS": {
+      "address": "0x9F5642dCCfb5dDa58F96eEe6Cab69478DC7CfaCc",
+      "abi": [
+        { "inputs": [], "stateMutability": "payable", "type": "constructor" },
+        {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "enum RPS.Hand",
+              "name": "_hand",
+              "type": "uint8"
+            }
+          ],
+          "name": "createRoom",
+          "outputs": [
+            { "internalType": "uint256", "name": "roomNum", "type": "uint256" }
+          ],
+          "stateMutability": "payable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            { "internalType": "uint256", "name": "roomNum", "type": "uint256" },
+            {
+              "internalType": "enum RPS.Hand",
+              "name": "_hand",
+              "type": "uint8"
+            }
+          ],
+          "name": "joinRoom",
+          "outputs": [],
+          "stateMutability": "payable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "owner",
+          "outputs": [
+            { "internalType": "address", "name": "", "type": "address" }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "renounceOwnership",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            { "internalType": "uint256", "name": "", "type": "uint256" }
+          ],
+          "name": "rooms",
+          "outputs": [
+            {
+              "components": [
+                {
+                  "internalType": "address payable",
+                  "name": "addr",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "playerBetAmount",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "enum RPS.Hand",
+                  "name": "hand",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "enum RPS.PlayerStatus",
+                  "name": "playerStatus",
+                  "type": "uint8"
+                }
+              ],
+              "internalType": "struct RPS.Player",
+              "name": "originator",
+              "type": "tuple"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "address payable",
+                  "name": "addr",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "playerBetAmount",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "enum RPS.Hand",
+                  "name": "hand",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "enum RPS.PlayerStatus",
+                  "name": "playerStatus",
+                  "type": "uint8"
+                }
+              ],
+              "internalType": "struct RPS.Player",
+              "name": "taker",
+              "type": "tuple"
+            },
+            {
+              "internalType": "uint256",
+              "name": "betAmount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum RPS.GameStatus",
+              "name": "gameStatus",
+              "type": "uint8"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            { "internalType": "address", "name": "newOwner", "type": "address" }
+          ],
+          "name": "transferOwnership",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "withdraw_ether_to_owner",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        }
+      ]
+    }
+  }
+}

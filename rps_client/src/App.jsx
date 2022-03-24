@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navigation from "./components/Navigation";
 import GameRooms from "./components/GameRooms";
 import styled from "styled-components";
+import Web3 from "web3";
+import artifact from "./contracts/RPS.json";
 
 const Container = styled.div`
   height: 100vh;
@@ -18,17 +20,32 @@ const Main = styled.main`
 `;
 
 const App = () => {
+  const web3 = new Web3(
+    "https://eth-rinkeby.alchemyapi.io/v2/5Evj6P8gVOWygwsWXfAHVjarFvrGhH3v"
+  );
+
+  const [account, setAccount] = useState("");
+  const [rpsContract, setRpsContract] = useState(null);
+
   useEffect(() => {
-    if (typeof window.ethereum !== "undefined") {
+    const { ethereum } = window;
+    if (typeof ethereum !== "undefined") {
       console.log("MetaMask is installed!");
+
+      const rps = new web3.eth.Contract(
+        artifact.contracts.RPS.abi,
+        artifact.contracts.RPS.address,
+        { from: account }
+      );
+      setRpsContract(rps);
     }
-  });
+  }, [account]);
 
   return (
     <Container>
-      <Navigation />
+      <Navigation account={account} handleAccount={setAccount} />
       <Main>
-        <GameRooms />
+        <GameRooms rps={rpsContract} />
       </Main>
     </Container>
   );
