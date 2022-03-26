@@ -9,32 +9,27 @@ const GameRooms = ({ rps }) => {
     if (rps === null) return;
     let i = 0;
     while (true) {
-      const room = await rps.methods.rooms(i).call();
-      // console.log(i, room);
-      if (room[0][0] !== "0x0000000000000000000000000000000000000000") {
-        setRooms((prev) => {
-          return {
-            ...prev,
-            [i]: {
-              roomNumber: i,
-              originator: room["originator"]["addr"],
-              taker: room["taker"]["addr"],
-              betAmount: room["betAmount"],
-              gameStatus: room["gameStatus"],
-            },
-          };
-        });
-
-        i++;
-      } else {
-        break;
-      }
+      let room = await rps.rooms(i);
+      if (room[0][0] === "0x0000000000000000000000000000000000000000") break;
+      setRooms((prev) => {
+        return {
+          ...prev,
+          [i]: {
+            roomNumber: i,
+            originator: room["originator"]["addr"],
+            taker: room["taker"]["addr"],
+            betAmount: room["betAmount"],
+            gameStatus: room["gameStatus"],
+          },
+        };
+      });
+      i++;
     }
   };
 
   useEffect(() => {
     getRooms();
-  }, [getRooms]);
+  }, [rps]);
 
   return (
     <ListGroup variant="flush">

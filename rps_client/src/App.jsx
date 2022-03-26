@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createContext } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navigation from "./components/Navigation";
 import GameRooms from "./components/GameRooms";
 import styled from "styled-components";
-import Web3 from "web3";
 import artifact from "./contracts/RPS.json";
+import { isEmpty } from "lodash";
+import { ethers } from "ethers";
 
 const Container = styled.div`
   height: 100vh;
@@ -19,36 +20,42 @@ const Main = styled.main`
   padding-bottom: 2rem;
 `;
 
-const App = () => {
-  const web3 = new Web3(
-    "https://eth-rinkeby.alchemyapi.io/v2/5Evj6P8gVOWygwsWXfAHVjarFvrGhH3v"
-  );
+const Context = createContext();
+const Provider = Context.Provider;
 
+const App = () => {
   const [account, setAccount] = useState("");
+  const [web3, setWeb3] = useState({});
   const [rpsContract, setRpsContract] = useState(null);
 
   useEffect(() => {
     const { ethereum } = window;
     if (typeof ethereum !== "undefined") {
       console.log("MetaMask is installed!");
+    }
 
-      const rps = new web3.eth.Contract(
-        artifact.contracts.RPS.abi,
+    if (!isEmpty(web3)) {
+      web3.getSigner(0).getAddress().then(setAccount);
+      const rps = new ethers.Contract(
         artifact.contracts.RPS.address,
-        { from: account }
+        artifact.contracts.RPS.abi,
+        web3.getSigner()
       );
       setRpsContract(rps);
     }
-  }, [account]);
+  }, [web3]);
 
   return (
     <Container>
-      <Navigation account={account} handleAccount={setAccount} />
-      <Main>
-        <GameRooms rps={rpsContract} />
-      </Main>
+      <Provider value={{ setWeb3 }}>
+        <Navigation account={account} />
+        <Main>
+          <GameRooms rps={rpsContract} />
+        </Main>
+      </Provider>
     </Container>
   );
 };
 
 export default App;
+export { Context };
